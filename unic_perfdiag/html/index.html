@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>unic_perfdiag</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app" class="panel hidden">
+    <header class="panel__header">
+      <div>
+        <h1>unic_perfdiag</h1>
+        <p>Benchmark A/B para maps/MLOs e UI NUI</p>
+      </div>
+      <button class="btn btn--ghost" id="closeBtn">Fechar (ESC)</button>
+    </header>
+
+    <section class="stats">
+      <div class="stat">
+        <span class="label">FPS Instantâneo</span>
+        <span class="value" id="fpsInstant">0</span>
+      </div>
+      <div class="stat">
+        <span class="label">FPS Médio (janela)</span>
+        <span class="value" id="fpsAvg">0</span>
+      </div>
+      <div class="stat">
+        <span class="label">Frametime Médio</span>
+        <span class="value" id="frameAvg">0 ms</span>
+      </div>
+      <div class="stat">
+        <span class="label">Spikes</span>
+        <span class="value" id="spikes">0</span>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="control-group">
+        <label>Duração amostragem (s)</label>
+        <select id="sampleSeconds">
+          <option value="20">20</option>
+          <option value="30" selected>30</option>
+          <option value="60">60</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>Estabilização (s)</label>
+        <select id="stabilizationSeconds">
+          <option value="5">5</option>
+          <option value="8" selected>8</option>
+          <option value="10">10</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>Cooldown (s)</label>
+        <select id="cooldownSeconds">
+          <option value="2">2</option>
+          <option value="4" selected>4</option>
+          <option value="6">6</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>Grupo</label>
+        <select id="groupSelect">
+          <option value="all">Todos</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>Modo de grupo</label>
+        <select id="groupMode">
+          <option value="single" selected>Individual</option>
+          <option value="bundle">Grupo (pacote)</option>
+        </select>
+      </div>
+      <div class="control-group toggle">
+        <label>
+          <input type="checkbox" id="mapsOnly" checked />
+          Testar apenas mapas/MLOs
+        </label>
+      </div>
+    </section>
+
+    <section class="buttons">
+      <button class="btn" id="startBtn">Start Benchmark</button>
+      <button class="btn btn--warning" id="stopBtn">Stop</button>
+      <button class="btn btn--secondary" id="exportJsonBtn">Export JSON</button>
+      <button class="btn btn--secondary" id="exportCsvBtn">Export CSV</button>
+    </section>
+
+    <section class="status">
+      <div>
+        <span class="label">Status:</span>
+        <span id="statusText">idle</span>
+      </div>
+      <div>
+        <span class="label">Cooldown:</span>
+        <span id="cooldownText">-</span>
+      </div>
+    </section>
+
+    <section class="locations">
+      <h2>Localização fixa / comparação de cenário</h2>
+      <div class="locations__controls">
+        <label class="toggle">
+          <input type="checkbox" id="fixedLocation" />
+          Fixar localização
+        </label>
+        <div class="btn-group">
+          <button class="btn btn--secondary" data-set="A">Salvar A</button>
+          <button class="btn btn--secondary" data-set="B">Salvar B</button>
+          <button class="btn btn--secondary" data-use="A">Usar A</button>
+          <button class="btn btn--secondary" data-use="B">Usar B</button>
+        </div>
+        <button class="btn btn--secondary" id="compareBtn">Baseline Compare</button>
+      </div>
+      <div class="locations__info">
+        <div>
+          <span class="label">Ativo:</span>
+          <span id="activeLocation">A</span>
+        </div>
+        <div>
+          <span class="label">A:</span>
+          <span id="locationA">não definido</span>
+        </div>
+        <div>
+          <span class="label">B:</span>
+          <span id="locationB">não definido</span>
+        </div>
+      </div>
+      <div class="locations__compare">
+        <div>
+          <span class="label">Baseline A:</span>
+          <span id="baselineA">-</span>
+        </div>
+        <div>
+          <span class="label">Baseline B:</span>
+          <span id="baselineB">-</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="results">
+      <h2>Resultados em tempo real</h2>
+      <div class="table">
+        <div class="table__head">
+          <span>Resource</span>
+          <span>Tipo</span>
+          <span>FPS Base</span>
+          <span>FPS Teste</span>
+          <span>Δ FPS</span>
+          <span>Frame Base</span>
+          <span>Frame Teste</span>
+          <span>Δ Frame</span>
+        </div>
+        <div id="resultsBody" class="table__body"></div>
+      </div>
+    </section>
+
+    <section class="export">
+      <h2>Export</h2>
+      <div class="export__info" id="exportInfo">Nenhum export realizado.</div>
+      <textarea id="exportOutput" readonly></textarea>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
